@@ -187,6 +187,18 @@ RSpec.describe BitmapEditor do
   end
 
   describe '#output_canvas' do
+    it 'returns an error if the canvas is empty' do
+      subject.instance_variable_set(:@canvas, [])
+      expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
+      subject.output_canvas
+    end
 
+    it 'outputs canvas when it exists' do
+      set_canvas
+      expect(STDOUT).to receive(:puts).with('WOW')
+      expect(STDOUT).to receive(:puts).with('CAR')
+      expect(STDOUT).to receive(:puts).with('YEA')
+      subject.output_canvas
+    end
   end
 end
