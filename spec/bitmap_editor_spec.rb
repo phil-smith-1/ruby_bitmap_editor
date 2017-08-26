@@ -106,7 +106,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if either of the first three parameters is less than 1' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel. First three parameters must be greater than zero.').exactly(3).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. First three parameters must be greater than zero.').exactly(3).times
       subject.vertical_segment(0, 1, 1, 'C')
       subject.vertical_segment(1, 0, 1, 'C')
       subject.vertical_segment(1, 1, 0, 'C')
@@ -123,7 +123,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the fourth parameter is not a string' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel. The fourth parameters must be a single character, A-Z.')
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. The fourth parameters must be a single character, A-Z.')
       subject.vertical_segment(1, 2, 3, 'colour')
     end
 
