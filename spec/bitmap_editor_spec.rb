@@ -18,6 +18,11 @@ RSpec.describe BitmapEditor do
       subject.run('fake_file.txt')
     end
 
+    it 'returns an error for invalid commands' do
+      expect(STDOUT).to receive(:puts).with('unrecognised command :(').exactly(4).times
+      subject.run('spec/support/fixtures/invalid_commands.txt')
+    end
+
     it 'returns the correct output when a file of commands is used' do
       expect(STDOUT).to receive(:puts).with('OOOOO')
       expect(STDOUT).to receive(:puts).with('OOZZZ')
@@ -25,7 +30,7 @@ RSpec.describe BitmapEditor do
       expect(STDOUT).to receive(:puts).with('OWOOO')
       expect(STDOUT).to receive(:puts).with('OWOOO')
       expect(STDOUT).to receive(:puts).with('OWOOO')
-      subject.run('../spec/support/fixtures/all_commands.txt')
+      subject.run('spec/support/fixtures/all_commands.txt')
     end
   end
 

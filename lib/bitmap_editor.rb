@@ -8,10 +8,21 @@ class BitmapEditor
     return puts "please provide correct file" if file.nil? || !File.exists?(file)
 
     File.open(file).each do |line|
-      line = line.chomp
-      case line
+      parsed_line = line.gsub(/\s+/, "")
+      command = parsed_line[0]
+      case command
+      when 'I'
+        create_canvas(parsed_line[1].to_i, parsed_line[2].to_i)
+      when 'C'
+        clear_canvas
+      when 'L'
+        colour_pixel(parsed_line[1].to_i, parsed_line[2].to_i, parsed_line[3])
+      when 'V'
+        vertical_segment(parsed_line[1].to_i, parsed_line[2].to_i, parsed_line[3].to_i, parsed_line[4])
+      when 'H'
+        horizontal_segment(parsed_line[1].to_i, parsed_line[2].to_i, parsed_line[3].to_i, parsed_line[4])
       when 'S'
-          puts "There is no image"
+        output_canvas
       else
           puts 'unrecognised command :('
       end
