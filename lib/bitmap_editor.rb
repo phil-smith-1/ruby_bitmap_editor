@@ -79,4 +79,9 @@ class BitmapEditor
       colour_pixel(x, y, colour)
     end
   end
+
+  def output_canvas
+    return puts 'Please create a canvas first.' if @canvas.empty?
+    @canvas.each { |row| puts row.join }
+  end
 end
