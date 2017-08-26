@@ -95,7 +95,49 @@ RSpec.describe BitmapEditor do
   end
 
   describe '#vertical_segment' do
+    it 'returns an error if either of the first three parameters is not an integer' do
+      set_canvas
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. First three parameters must be whole numbers.').exactly(4).times
+      subject.vertical_segment('h', 'i', 'n', 'C')
+      subject.vertical_segment(1, 'i', 1, 'C')
+      subject.vertical_segment('h', 1, 1, 'C')
+      subject.vertical_segment(1, 'i', 'n', 'C')
+    end
 
+    it 'returns an error if either of the first three parameters is less than 1' do
+      set_canvas
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel. First three parameters must be greater than zero.').exactly(3).times
+      subject.vertical_segment(0, 1, 1, 'C')
+      subject.vertical_segment(1, 0, 1, 'C')
+      subject.vertical_segment(1, 1, 0, 'C')
+    end
+
+    it 'returns an error if the selected coordinates do not exist on the canvas' do
+      set_canvas
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixels, as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(4).times
+      subject.vertical_segment(1, 4, 1, 'C')
+      subject.vertical_segment(4, 1, 1, 'C')
+      subject.vertical_segment(1, 1, 4, 'C')
+      subject.vertical_segment(4, 4, 4, 'C')
+    end
+
+    it 'returns an error if the fourth parameter is not a string' do
+      set_canvas
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel. The fourth parameters must be a single character, A-Z.')
+      subject.vertical_segment(1, 2, 3, 'colour')
+    end
+
+    it 'returns an error if the canvas has not been created' do
+      subject.instance_variable_set(:@canvas, [])
+      expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
+      subject.vertical_segment(1, 1, 1, 'C')
+    end
+
+    it 'changes the selected pixels to the requested colour' do
+      set_canvas
+      subject.vertical_segment(2, 1, 2, 'P')
+      expect(subject.instance_variable_get(:@canvas)).to eq([['C', 'P', 'R'], ['W', 'P', 'W'], ['Y', 'E', 'A']])
+    end
   end
 
   describe '#horizontal_segment' do
