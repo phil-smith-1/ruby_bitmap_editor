@@ -30,7 +30,7 @@ class BitmapEditor
 
   def clear_canvas
     @canvas.count.times do |row|
-      @canvas[row].count.times { |column| @canvas[row][column] = 'O' }
+      @canvas[row].count.times { |column| colour_pixel(row + 1 , column + 1, 'O') }
     end
   end
 
