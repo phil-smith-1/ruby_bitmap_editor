@@ -18,13 +18,13 @@ class BitmapEditor
     end
   end
 
-  def create_canvas(w, h)
-    return puts 'Cannot create canvas. Both parameters must be whole numbers.' if !w.is_a?(Integer) || !h.is_a?(Integer)
+  def create_canvas(width, height)
+    return puts 'Cannot create canvas. Both parameters must be whole numbers.' if !width.is_a?(Integer) || !height.is_a?(Integer)
 
     @canvas = []
-    h.times do |row|
+    height.times do |row|
       @canvas[row] = []
-      w.times { @canvas[row] << 'O' }
+      width.times { @canvas[row] << 'O' }
     end
   end
 
@@ -32,5 +32,19 @@ class BitmapEditor
     @canvas.count.times do |row|
       @canvas[row].count.times { |column| @canvas[row][column] = 'O' }
     end
+  end
+
+  def colour_pixel(x, y, colour)
+    return puts 'Please create a canvas first.' if @canvas.empty?
+    return puts 'Cannot colour pixel. First two parameters must be whole numbers.' if !x.is_a?(Integer) || !y.is_a?(Integer)
+    return puts 'Cannot colour pixel. First two parameters must be greater than zero.' if x < 1 || y < 1
+    return puts 'Cannot colour pixel. The third parameters must be a single character, A-Z.' if !colour.is_a?(String) || colour.length > 1
+
+    height = @canvas.count
+    width = @canvas[0].count
+
+    return puts "Cannot colour pixel, as it does not exist. Please choose between (1, 1) and (#{width}, #{height})" if x > width || y > height
+
+    @canvas[y - 1][x - 1] = colour
   end
 end

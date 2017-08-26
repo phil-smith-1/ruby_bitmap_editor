@@ -48,6 +48,7 @@ RSpec.describe BitmapEditor do
 
   describe '#colour_pixel' do
     it 'returns an error if either of the first two parameters is not an integer' do
+      subject.instance_variable_set(:@canvas, [['C', 'A', 'R'], ['W', 'O', 'W'], ['Y', 'E', 'A']])
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel. First two parameters must be whole numbers.').exactly(3).times
       subject.colour_pixel('h', 'i', 'C')
       subject.colour_pixel(1, 'i', 'C')
@@ -55,6 +56,7 @@ RSpec.describe BitmapEditor do
     end
 
     it 'returns an error if either of the first two parameters is less than 1' do
+      subject.instance_variable_set(:@canvas, [['C', 'A', 'R'], ['W', 'O', 'W'], ['Y', 'E', 'A']])
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel. First two parameters must be greater than zero.').twice
       subject.colour_pixel(0, 1, 'C')
       subject.colour_pixel(1, 0, 'C')
@@ -69,13 +71,14 @@ RSpec.describe BitmapEditor do
     end
 
     it 'returns an error if the third parameter is not a string' do
+      subject.instance_variable_set(:@canvas, [['C', 'A', 'R'], ['W', 'O', 'W'], ['Y', 'E', 'A']])
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel. The third parameters must be a single character, A-Z.')
       subject.colour_pixel(1, 2, 'colour')
     end
 
     it 'returns an error if the canvas has not been created' do
       subject.instance_variable_set(:@canvas, [])
-      expect(STDOUT).to receive(:puts).with('Please create a canvas first')
+      expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
       subject.colour_pixel(1, 1, 'C')
     end
 
