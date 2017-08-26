@@ -63,4 +63,20 @@ class BitmapEditor
       colour_pixel(x, y, colour)
     end
   end
+
+  def horizontal_segment(x1, x2, y, colour)
+    return puts 'Please create a canvas first.' if @canvas.empty?
+    return puts 'Cannot colour pixels. First three parameters must be whole numbers.' if !x1.is_a?(Integer) || !x2.is_a?(Integer) || !y.is_a?(Integer)
+    return puts 'Cannot colour pixels. First three parameters must be greater than zero.' if x1 < 1 || x2 < 1 || y < 1
+    return puts 'Cannot colour pixels. The fourth parameters must be a single character, A-Z.' if !colour.is_a?(String) || colour.length > 1
+
+    height = @canvas.count
+    width = @canvas[0].count
+
+    return puts "Cannot colour selected pixels, as at least one does not exist. Please stay between (1, 1) and (#{width}, #{height})" if x1 > width || x2 > width || y > height
+
+    (x1..x2).each do |x|
+      colour_pixel(x, y, colour)
+    end
+  end
 end
