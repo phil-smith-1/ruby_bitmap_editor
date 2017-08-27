@@ -1,14 +1,13 @@
-class BitmapEditor
-
+class BitmapEditor # :nodoc:
   def initialize
     @canvas = []
   end
 
   def run(file)
-    return puts "please provide correct file" if file.nil? || !File.exists?(file)
+    return puts 'please provide correct file' if file.nil? || !File.exist?(file)
 
     File.open(file).each do |line|
-      parsed_line = line.gsub(/\s+/, "")
+      parsed_line = line.gsub(/\s+/, '')
       command = parsed_line[0]
       case command
       when 'I'
@@ -24,7 +23,7 @@ class BitmapEditor
       when 'S'
         output_canvas
       else
-          puts 'unrecognised command :('
+        puts 'unrecognised command :('
       end
     end
   end
@@ -41,7 +40,7 @@ class BitmapEditor
 
   def clear_canvas
     @canvas.count.times do |row|
-      @canvas[row].count.times { |column| colour_pixel(row + 1 , column + 1, 'O') }
+      @canvas[row].count.times { |column| colour_pixel(row + 1, column + 1, 'O') }
     end
   end
 

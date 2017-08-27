@@ -1,10 +1,10 @@
-require_relative '../lib/bitmap_editor.rb'
+require_relative '../../lib/bitmap_editor.rb'
 
 RSpec.describe BitmapEditor do
   subject { BitmapEditor.new }
 
   def set_canvas
-    subject.instance_variable_set(:@canvas, [['C', 'A', 'R'], ['W', 'O', 'W'], ['Y', 'E', 'A']])
+    subject.instance_variable_set(:@canvas, [%w[C A R], %w[W O W], %w[Y E A]])
   end
 
   describe '#run' do
@@ -44,7 +44,7 @@ RSpec.describe BitmapEditor do
 
     it 'sets the correct canvas' do
       subject.create_canvas(2, 3)
-      expect(subject.instance_variable_get(:@canvas)).to eq([['O', 'O'], ['O', 'O'], ['O', 'O']])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[O O], %w[O O], %w[O O]])
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe BitmapEditor do
     it 'sets every pixel on the canvas to O' do
       set_canvas
       subject.clear_canvas
-      expect(subject.instance_variable_get(:@canvas)).to eq([['O', 'O', 'O'], ['O', 'O', 'O'], ['O', 'O', 'O']])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[O O O], %w[O O O], %w[O O O]])
     end
   end
 
@@ -90,7 +90,7 @@ RSpec.describe BitmapEditor do
     it 'changes the selected pixel to the requested colour' do
       set_canvas
       subject.colour_pixel(3, 3, 'P')
-      expect(subject.instance_variable_get(:@canvas)).to eq([['C', 'A', 'R'], ['W', 'O', 'W'], ['Y', 'E', 'P']])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[C A R], %w[W O W], %w[Y E P]])
     end
   end
 
@@ -131,7 +131,7 @@ RSpec.describe BitmapEditor do
     it 'changes the selected pixels to the requested colour' do
       set_canvas
       subject.vertical_segment(2, 1, 2, 'P')
-      expect(subject.instance_variable_get(:@canvas)).to eq([['C', 'P', 'R'], ['W', 'P', 'W'], ['Y', 'E', 'A']])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[C P R], %w[W P W], %w[Y E A]])
     end
   end
 
@@ -172,7 +172,7 @@ RSpec.describe BitmapEditor do
     it 'changes the selected pixels to the requested colour' do
       set_canvas
       subject.horizontal_segment(1, 2, 2, 'P')
-      expect(subject.instance_variable_get(:@canvas)).to eq([['C', 'A', 'R'], ['P', 'P', 'W'], ['Y', 'E', 'A']])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[C A R], %w[P P W], %w[Y E A]])
     end
   end
 
