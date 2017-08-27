@@ -1,4 +1,14 @@
 class BitmapEditor # :nodoc:
+  VALID_COMMANDS = 'ICLVHS'.freeze
+  COMMAND_METHODS = {
+    I: :create_canvas,
+    C: :clear_canvas,
+    L: :colour_pixel,
+    V: :vertical_segment,
+    H: :horizontal_segment,
+    S: :output_canvas
+  }.freeze
+
   def initialize
     @canvas = []
   end
@@ -9,27 +19,18 @@ class BitmapEditor # :nodoc:
     File.open(file).each do |line|
       parsed_line = line.gsub(/\s+/, '')
       command = parsed_line[0]
-      case command
-      when 'I'
-        create_canvas(parsed_line[1].to_i, parsed_line[2].to_i)
-      when 'C'
-        clear_canvas
-      when 'L'
-        colour_pixel(parsed_line[1].to_i, parsed_line[2].to_i, parsed_line[3])
-      when 'V'
-        vertical_segment(parsed_line[1].to_i, parsed_line[2].to_i, parsed_line[3].to_i, parsed_line[4])
-      when 'H'
-        horizontal_segment(parsed_line[1].to_i, parsed_line[2].to_i, parsed_line[3].to_i, parsed_line[4])
-      when 'S'
-        output_canvas
+      if VALID_COMMANDS.include?(command)
+        send(COMMAND_METHODS[command.to_sym], parsed_line)
       else
         puts 'unrecognised command :('
       end
     end
   end
 
-  def create_canvas(width, height)
-    return puts 'Cannot create canvas. Both parameters must be whole numbers.' if !width.is_a?(Integer) || !height.is_a?(Integer)
+  def create_canvas(args)
+    width = args[1].to_i
+    height = args[2].to_i
+    return puts 'Cannot create canvas. Both parameters must be whole numbers and cannot be zero.' if width.zero? || height.zero?
 
     @canvas = []
     height.times do |row|
@@ -38,44 +39,55 @@ class BitmapEditor # :nodoc:
     end
   end
 
-  def clear_canvas
+  def clear_canvas(_args = [])
     @canvas.count.times do |row|
-      @canvas[row].count.times { |column| colour_pixel(row + 1, column + 1, 'O') }
+      @canvas[row].count.times { |column| colour_pixel("L#{row + 1}#{column + 1}O") }
     end
   end
 
-  def colour_pixel(x, y, colour)
+  def colour_pixel(args)
+    x = args[1].to_i
+    y = args[2].to_i
+    colour = args[3]
     return unless canvas_exists?
     return unless numbers_correct?([x, y])
-    return unless single_character?(colour)
+    return unless alpha_character?(colour)
     return unless in_bounds?([[x], [y]])
 
     @canvas[y - 1][x - 1] = colour
   end
 
-  def vertical_segment(x, y1, y2, colour)
+  def vertical_segment(args)
+    x = args[1].to_i
+    y1 = args[2].to_i
+    y2 = args[3].to_i
+    colour = args[4]
     return unless canvas_exists?
     return unless numbers_correct?([x, y1, y2])
-    return unless single_character?(colour)
+    return unless alpha_character?(colour)
     return unless in_bounds?([[x], [y1, y2]])
 
     (y1..y2).each do |y|
-      colour_pixel(x, y, colour)
+      colour_pixel("L#{x}#{y}#{colour}")
     end
   end
 
-  def horizontal_segment(x1, x2, y, colour)
+  def horizontal_segment(args)
+    x1 = args[1].to_i
+    x2 = args[2].to_i
+    y = args[3].to_i
+    colour = args[4]
     return unless canvas_exists?
     return unless numbers_correct?([x1, x2, y])
-    return unless single_character?(colour)
+    return unless alpha_character?(colour)
     return unless in_bounds?([[x1, x2], [y]])
 
     (x1..x2).each do |x|
-      colour_pixel(x, y, colour)
+      colour_pixel("L#{x}#{y}#{colour}")
     end
   end
 
-  def output_canvas
+  def output_canvas(_args = [])
     return unless canvas_exists?
     @canvas.each { |row| puts row.join }
   end
@@ -100,8 +112,8 @@ class BitmapEditor # :nodoc:
     true
   end
 
-  def single_character?(character)
-    unless character.is_a?(String) && character.length == 1
+  def alpha_character?(character)
+    unless /[A-Za-z]/ =~ character
       puts 'Cannot colour pixel(s). The final parameter must be a single character, A-Z.'
       return false
     end
