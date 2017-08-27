@@ -49,10 +49,7 @@ class BitmapEditor # :nodoc:
     x = args[1].to_i
     y = args[2].to_i
     colour = args[3]
-    return unless canvas_exists?
-    return unless numbers_correct?([x, y])
-    return unless alpha_character?(colour)
-    return unless in_bounds?([[x], [y]])
+    return unless canvas_exists? && numbers_correct?([x, y]) && alpha_character?(colour) && in_bounds?([[x], [y]])
 
     @canvas[y - 1][x - 1] = colour
   end
@@ -62,10 +59,7 @@ class BitmapEditor # :nodoc:
     y1 = args[2].to_i
     y2 = args[3].to_i
     colour = args[4]
-    return unless canvas_exists?
-    return unless numbers_correct?([x, y1, y2])
-    return unless alpha_character?(colour)
-    return unless in_bounds?([[x], [y1, y2]])
+    return unless canvas_exists? && numbers_correct?([x, y1, y2]) && alpha_character?(colour) && in_bounds?([[x], [y1, y2]])
 
     (y1..y2).each do |y|
       colour_pixel("L#{x}#{y}#{colour}")
@@ -77,10 +71,7 @@ class BitmapEditor # :nodoc:
     x2 = args[2].to_i
     y = args[3].to_i
     colour = args[4]
-    return unless canvas_exists?
-    return unless numbers_correct?([x1, x2, y])
-    return unless alpha_character?(colour)
-    return unless in_bounds?([[x1, x2], [y]])
+    return unless canvas_exists? && numbers_correct?([x1, x2, y]) && alpha_character?(colour) && in_bounds?([[x1, x2], [y]])
 
     (x1..x2).each do |x|
       colour_pixel("L#{x}#{y}#{colour}")
