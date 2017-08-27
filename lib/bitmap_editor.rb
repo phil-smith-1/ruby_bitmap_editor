@@ -96,7 +96,7 @@ class BitmapEditor # :nodoc:
   def numbers_correct?(args)
     args.each do |parameter|
       unless parameter.is_a?(Integer) && !parameter.zero?
-        puts "Cannot colour pixel(s). First #{args.count} parameters must be whole numbers and cannot be zero."
+        puts "Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero."
         return false
       end
     end
@@ -105,7 +105,7 @@ class BitmapEditor # :nodoc:
 
   def alpha_character?(character)
     unless /[A-Za-z]/ =~ character && character.length == 1
-      puts 'Cannot colour pixel(s). The final parameter must be a single character, A-Z.'
+      puts 'Cannot colour pixel(s). The colour code must be a single character, A-Z.'
       return false
     end
     true

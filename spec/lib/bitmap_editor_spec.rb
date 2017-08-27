@@ -61,7 +61,7 @@ RSpec.describe BitmapEditor do
   describe '#colour_pixel' do
     it 'returns an error if either of the first two parameters are not integers or are zero' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). First 2 parameters must be whole numbers and cannot be zero.').exactly(5).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero.').exactly(5).times
       subject.colour_pixel(%w(L h i C))
       subject.colour_pixel(%w(L 1 i C))
       subject.colour_pixel(%w(L h 1 C))
@@ -79,7 +79,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the third parameter is not a string' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The final parameter must be a single character, A-Z.')
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The colour code must be a single character, A-Z.')
       subject.colour_pixel(%w(L 1 2 2))
     end
 
@@ -99,7 +99,7 @@ RSpec.describe BitmapEditor do
   describe '#vertical_segment' do
     it 'returns an error if either of the first three parameters are not integers or are zero' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). First 3 parameters must be whole numbers and cannot be zero.').exactly(7).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero.').exactly(7).times
       subject.vertical_segment(%w(V h i n C))
       subject.vertical_segment(%w(V 1 i 1 C))
       subject.vertical_segment(%w(V h 1 1 C))
@@ -120,7 +120,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the fourth parameter is not a string' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The final parameter must be a single character, A-Z.')
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The colour code must be a single character, A-Z.')
       subject.vertical_segment(%w(V 1 2 3 4))
     end
 
@@ -140,7 +140,7 @@ RSpec.describe BitmapEditor do
   describe '#horizontal_segment' do
     it 'returns an error if either of the first three parameters are not integers or are zero' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). First 3 parameters must be whole numbers and cannot be zero.').exactly(7).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero.').exactly(7).times
       subject.horizontal_segment(%w(H h i n C))
       subject.horizontal_segment(%w(H 1 i 1 C))
       subject.horizontal_segment(%w(H h 1 1 C))
@@ -161,7 +161,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the fourth parameter is not a string' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The final parameter must be a single character, A-Z.')
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The colour code must be a single character, A-Z.')
       subject.horizontal_segment(%w(H 1 2 3 4))
     end
 
