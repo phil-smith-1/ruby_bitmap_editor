@@ -9,28 +9,20 @@ class BitmapEditor # :nodoc:
     S: :output_canvas
   }.freeze
 
-  def initialize
-    @canvas = []
-  end
-
   def run(file)
     return puts 'please provide correct file' if file.nil? || !File.exist?(file)
 
     File.open(file).each do |line|
       parsed_line = line.split(' ')
       command = parsed_line[0]
-      if VALID_COMMANDS.include?(command)
-        send(COMMAND_METHODS[command.to_sym], parsed_line)
-      else
-        puts 'unrecognised command :('
-      end
+      VALID_COMMANDS.include?(command) ? send(COMMAND_METHODS[command.to_sym], parsed_line) : puts('unrecognised command :(')
     end
   end
 
   def create_canvas(args)
     width = args[1].to_i
     height = args[2].to_i
-    return puts 'Cannot create canvas. Both parameters must be whole numbers between 1 and 250.' unless width.between?(1, 250) && height.between?(1, 250)
+    return puts 'Cannot create canvas. Parameters must be whole numbers between 1 and 250.' unless width.between?(1, 250) && height.between?(1, 250)
 
     @canvas = []
     height.times do |row|
@@ -96,7 +88,7 @@ class BitmapEditor # :nodoc:
   def numbers_correct?(args)
     args.each do |parameter|
       unless parameter.is_a?(Integer) && !parameter.zero?
-        puts "Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero."
+        puts 'Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero.'
         return false
       end
     end

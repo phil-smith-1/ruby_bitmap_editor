@@ -36,16 +36,16 @@ RSpec.describe BitmapEditor do
 
   describe '#create_canvas' do
     it 'returns an error if either of the parameters are not integers, zero or greater than 250' do
-      expect(STDOUT).to receive(:puts).with('Cannot create canvas. Both parameters must be whole numbers between 1 and 250.').exactly(5).times
-      subject.create_canvas(%w(I h i))
-      subject.create_canvas(%w(I 1 i))
-      subject.create_canvas(%w(I h 1))
-      subject.create_canvas(%w(I 251 1))
-      subject.create_canvas(%w(I 250 0))
+      expect(STDOUT).to receive(:puts).with('Cannot create canvas. Parameters must be whole numbers between 1 and 250.').exactly(5).times
+      subject.create_canvas(%w[I h i])
+      subject.create_canvas(%w[I 1 i])
+      subject.create_canvas(%w[I h 1])
+      subject.create_canvas(%w[I 251 1])
+      subject.create_canvas(%w[I 250 0])
     end
 
     it 'sets the correct canvas' do
-      subject.create_canvas(%w(I 2 3))
+      subject.create_canvas(%w[I 2 3])
       expect(subject.instance_variable_get(:@canvas)).to eq([%w[O O], %w[O O], %w[O O]])
     end
   end
@@ -62,36 +62,37 @@ RSpec.describe BitmapEditor do
     it 'returns an error if either of the first two parameters are not integers or are zero' do
       set_canvas
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero.').exactly(5).times
-      subject.colour_pixel(%w(L h i C))
-      subject.colour_pixel(%w(L 1 i C))
-      subject.colour_pixel(%w(L h 1 C))
-      subject.colour_pixel(%w(L 0 1 C))
-      subject.colour_pixel(%w(L 1 0 C))
+      subject.colour_pixel(%w[L h i C])
+      subject.colour_pixel(%w[L 1 i C])
+      subject.colour_pixel(%w[L h 1 C])
+      subject.colour_pixel(%w[L 0 1 C])
+      subject.colour_pixel(%w[L 1 0 C])
     end
 
     it 'returns an error if the selected coordinate does not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(3).times
-      subject.colour_pixel(%w(L 1 4 C))
-      subject.colour_pixel(%w(L 4 1 C))
-      subject.colour_pixel(%w(L 4 4 C))
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)')
+                                      .exactly(3).times
+      subject.colour_pixel(%w[L 1 4 C])
+      subject.colour_pixel(%w[L 4 1 C])
+      subject.colour_pixel(%w[L 4 4 C])
     end
 
     it 'returns an error if the third parameter is not a string' do
       set_canvas
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The colour code must be a single character, A-Z.')
-      subject.colour_pixel(%w(L 1 2 2))
+      subject.colour_pixel(%w[L 1 2 2])
     end
 
     it 'returns an error if the canvas has not been created' do
       subject.instance_variable_set(:@canvas, [])
       expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
-      subject.colour_pixel(%w(L 1 1 C))
+      subject.colour_pixel(%w[L 1 1 C])
     end
 
     it 'changes the selected pixel to the requested colour' do
       set_canvas
-      subject.colour_pixel(%w(L 3 3 P))
+      subject.colour_pixel(%w[L 3 3 P])
       expect(subject.instance_variable_get(:@canvas)).to eq([%w[C A R], %w[W O W], %w[Y E P]])
     end
   end
@@ -100,39 +101,40 @@ RSpec.describe BitmapEditor do
     it 'returns an error if either of the first three parameters are not integers or are zero' do
       set_canvas
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero.').exactly(7).times
-      subject.vertical_segment(%w(V h i n C))
-      subject.vertical_segment(%w(V 1 i 1 C))
-      subject.vertical_segment(%w(V h 1 1 C))
-      subject.vertical_segment(%w(V 1 i n C))
-      subject.vertical_segment(%w(V 0 1 1 C))
-      subject.vertical_segment(%w(V 1 0 1 C))
-      subject.vertical_segment(%w(V 1 1 0 C))
+      subject.vertical_segment(%w[V h i n C])
+      subject.vertical_segment(%w[V 1 i 1 C])
+      subject.vertical_segment(%w[V h 1 1 C])
+      subject.vertical_segment(%w[V 1 i n C])
+      subject.vertical_segment(%w[V 0 1 1 C])
+      subject.vertical_segment(%w[V 1 0 1 C])
+      subject.vertical_segment(%w[V 1 1 0 C])
     end
 
     it 'returns an error if the selected coordinates do not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(4).times
-      subject.vertical_segment(%w(V 1 4 1 C))
-      subject.vertical_segment(%w(V 4 1 1 C))
-      subject.vertical_segment(%w(V 1 1 4 C))
-      subject.vertical_segment(%w(V 4 4 4 C))
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)')
+                                      .exactly(4).times
+      subject.vertical_segment(%w[V 1 4 1 C])
+      subject.vertical_segment(%w[V 4 1 1 C])
+      subject.vertical_segment(%w[V 1 1 4 C])
+      subject.vertical_segment(%w[V 4 4 4 C])
     end
 
     it 'returns an error if the fourth parameter is not a string' do
       set_canvas
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The colour code must be a single character, A-Z.')
-      subject.vertical_segment(%w(V 1 2 3 4))
+      subject.vertical_segment(%w[V 1 2 3 4])
     end
 
     it 'returns an error if the canvas has not been created' do
       subject.instance_variable_set(:@canvas, [])
       expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
-      subject.vertical_segment(%w(V 1 1 1 C))
+      subject.vertical_segment(%w[V 1 1 1 C])
     end
 
     it 'changes the selected pixels to the requested colour' do
       set_canvas
-      subject.vertical_segment(%w(V 2 1 2 P))
+      subject.vertical_segment(%w[V 2 1 2 P])
       expect(subject.instance_variable_get(:@canvas)).to eq([%w[C P R], %w[W P W], %w[Y E A]])
     end
   end
@@ -141,39 +143,40 @@ RSpec.describe BitmapEditor do
     it 'returns an error if either of the first three parameters are not integers or are zero' do
       set_canvas
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). Coordinates must be whole numbers and cannot be zero.').exactly(7).times
-      subject.horizontal_segment(%w(H h i n C))
-      subject.horizontal_segment(%w(H 1 i 1 C))
-      subject.horizontal_segment(%w(H h 1 1 C))
-      subject.horizontal_segment(%w(H 1 i n C))
-      subject.horizontal_segment(%w(H 0 1 1 C))
-      subject.horizontal_segment(%w(H 1 0 1 C))
-      subject.horizontal_segment(%w(H 1 1 0 C))
+      subject.horizontal_segment(%w[H h i n C])
+      subject.horizontal_segment(%w[H 1 i 1 C])
+      subject.horizontal_segment(%w[H h 1 1 C])
+      subject.horizontal_segment(%w[H 1 i n C])
+      subject.horizontal_segment(%w[H 0 1 1 C])
+      subject.horizontal_segment(%w[H 1 0 1 C])
+      subject.horizontal_segment(%w[H 1 1 0 C])
     end
 
     it 'returns an error if the selected coordinates do not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(4).times
-      subject.horizontal_segment(%w(H 1 4 1 C))
-      subject.horizontal_segment(%w(H 4 1 1 C))
-      subject.horizontal_segment(%w(H 1 1 4 C))
-      subject.horizontal_segment(%w(H 4 4 4 C))
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)')
+                                      .exactly(4).times
+      subject.horizontal_segment(%w[H 1 4 1 C])
+      subject.horizontal_segment(%w[H 4 1 1 C])
+      subject.horizontal_segment(%w[H 1 1 4 C])
+      subject.horizontal_segment(%w[H 4 4 4 C])
     end
 
     it 'returns an error if the fourth parameter is not a string' do
       set_canvas
       expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The colour code must be a single character, A-Z.')
-      subject.horizontal_segment(%w(H 1 2 3 4))
+      subject.horizontal_segment(%w[H 1 2 3 4])
     end
 
     it 'returns an error if the canvas has not been created' do
       subject.instance_variable_set(:@canvas, [])
       expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
-      subject.horizontal_segment(%w(H 1 1 1 C))
+      subject.horizontal_segment(%w[H 1 1 1 C])
     end
 
     it 'changes the selected pixels to the requested colour' do
       set_canvas
-      subject.horizontal_segment(%w(H 1 2 2 P))
+      subject.horizontal_segment(%w[H 1 2 2 P])
       expect(subject.instance_variable_get(:@canvas)).to eq([%w[C A R], %w[P P W], %w[Y E A]])
     end
   end
