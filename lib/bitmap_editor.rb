@@ -40,7 +40,7 @@ class BitmapEditor # :nodoc:
   def colour_pixel(args)
     x = args[1].to_i
     y = args[2].to_i
-    colour = args[3]
+    colour = args[3].upcase
     return unless canvas_exists? && numbers_correct?([x, y]) && alpha_character?(colour) && in_bounds?([[x], [y]])
 
     @canvas[y - 1][x - 1] = colour
@@ -50,7 +50,7 @@ class BitmapEditor # :nodoc:
     x = args[1].to_i
     y1 = args[2].to_i
     y2 = args[3].to_i
-    colour = args[4]
+    colour = args[4].upcase
     return unless canvas_exists? && numbers_correct?([x, y1, y2]) && alpha_character?(colour) && in_bounds?([[x], [y1, y2]])
 
     (y1..y2).each do |y|
@@ -62,7 +62,7 @@ class BitmapEditor # :nodoc:
     x1 = args[1].to_i
     x2 = args[2].to_i
     y = args[3].to_i
-    colour = args[4]
+    colour = args[4].upcase
     return unless canvas_exists? && numbers_correct?([x1, x2, y]) && alpha_character?(colour) && in_bounds?([[x1, x2], [y]])
 
     (x1..x2).each do |x|
@@ -96,7 +96,7 @@ class BitmapEditor # :nodoc:
   end
 
   def alpha_character?(character)
-    unless /[A-Za-z]/ =~ character && character.length == 1
+    unless /[A-Z]/ =~ character && character.length == 1
       puts 'Cannot colour pixel(s). The colour code must be a single character, A-Z.'
       return false
     end
