@@ -57,24 +57,19 @@ RSpec.describe BitmapEditor do
   end
 
   describe '#colour_pixel' do
-    it 'returns an error if either of the first two parameters is not an integer' do
+    it 'returns an error if either of the first two parameters are not integers or are zero' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel. First two parameters must be whole numbers.').exactly(3).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). First 2 parameters must be whole numbers and cannot be zero.').exactly(5).times
       subject.colour_pixel('h', 'i', 'C')
       subject.colour_pixel(1, 'i', 'C')
       subject.colour_pixel('h', 1, 'C')
-    end
-
-    it 'returns an error if either of the first two parameters is less than 1' do
-      set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel. First two parameters must be greater than zero.').twice
       subject.colour_pixel(0, 1, 'C')
       subject.colour_pixel(1, 0, 'C')
     end
 
     it 'returns an error if the selected coordinate does not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel, as it does not exist. Please choose between (1, 1) and (3, 3)').exactly(3).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(3).times
       subject.colour_pixel(1, 4, 'C')
       subject.colour_pixel(4, 1, 'C')
       subject.colour_pixel(4, 4, 'C')
@@ -82,7 +77,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the third parameter is not a string' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixel. The third parameters must be a single character, A-Z.')
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The final parameter must be a single character, A-Z.')
       subject.colour_pixel(1, 2, 'colour')
     end
 
@@ -100,18 +95,13 @@ RSpec.describe BitmapEditor do
   end
 
   describe '#vertical_segment' do
-    it 'returns an error if either of the first three parameters is not an integer' do
+    it 'returns an error if either of the first three parameters are not integers or are zero' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. First three parameters must be whole numbers.').exactly(4).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). First 3 parameters must be whole numbers and cannot be zero.').exactly(7).times
       subject.vertical_segment('h', 'i', 'n', 'C')
       subject.vertical_segment(1, 'i', 1, 'C')
       subject.vertical_segment('h', 1, 1, 'C')
       subject.vertical_segment(1, 'i', 'n', 'C')
-    end
-
-    it 'returns an error if either of the first three parameters is less than 1' do
-      set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. First three parameters must be greater than zero.').exactly(3).times
       subject.vertical_segment(0, 1, 1, 'C')
       subject.vertical_segment(1, 0, 1, 'C')
       subject.vertical_segment(1, 1, 0, 'C')
@@ -119,7 +109,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the selected coordinates do not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixels, as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(4).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(4).times
       subject.vertical_segment(1, 4, 1, 'C')
       subject.vertical_segment(4, 1, 1, 'C')
       subject.vertical_segment(1, 1, 4, 'C')
@@ -128,7 +118,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the fourth parameter is not a string' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. The fourth parameters must be a single character, A-Z.')
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The final parameter must be a single character, A-Z.')
       subject.vertical_segment(1, 2, 3, 'colour')
     end
 
@@ -146,18 +136,13 @@ RSpec.describe BitmapEditor do
   end
 
   describe '#horizontal_segment' do
-    it 'returns an error if either of the first three parameters is not an integer' do
+    it 'returns an error if either of the first three parameters are not integers or are zero' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. First three parameters must be whole numbers.').exactly(4).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). First 3 parameters must be whole numbers and cannot be zero.').exactly(7).times
       subject.horizontal_segment('h', 'i', 'n', 'C')
       subject.horizontal_segment(1, 'i', 1, 'C')
       subject.horizontal_segment('h', 1, 1, 'C')
       subject.horizontal_segment(1, 'i', 'n', 'C')
-    end
-
-    it 'returns an error if either of the first three parameters is less than 1' do
-      set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. First three parameters must be greater than zero.').exactly(3).times
       subject.horizontal_segment(0, 1, 1, 'C')
       subject.horizontal_segment(1, 0, 1, 'C')
       subject.horizontal_segment(1, 1, 0, 'C')
@@ -165,7 +150,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the selected coordinates do not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixels, as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(4).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)').exactly(4).times
       subject.horizontal_segment(1, 4, 1, 'C')
       subject.horizontal_segment(4, 1, 1, 'C')
       subject.horizontal_segment(1, 1, 4, 'C')
@@ -174,7 +159,7 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the fourth parameter is not a string' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour pixels. The fourth parameters must be a single character, A-Z.')
+      expect(STDOUT).to receive(:puts).with('Cannot colour pixel(s). The final parameter must be a single character, A-Z.')
       subject.horizontal_segment(1, 2, 3, 'colour')
     end
 

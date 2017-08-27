@@ -46,29 +46,19 @@ class BitmapEditor
   end
 
   def colour_pixel(x, y, colour)
-    return puts 'Please create a canvas first.' if @canvas.empty?
-    return puts 'Cannot colour pixel. First two parameters must be whole numbers.' if !x.is_a?(Integer) || !y.is_a?(Integer)
-    return puts 'Cannot colour pixel. First two parameters must be greater than zero.' if x < 1 || y < 1
-    return puts 'Cannot colour pixel. The third parameters must be a single character, A-Z.' if !colour.is_a?(String) || colour.length > 1
-
-    height = @canvas.count
-    width = @canvas[0].count
-
-    return puts "Cannot colour pixel, as it does not exist. Please choose between (1, 1) and (#{width}, #{height})" if x > width || y > height
+    return unless canvas_exists?
+    return unless numbers_correct?([x, y])
+    return unless single_character?(colour)
+    return unless in_bounds?([[x], [y]])
 
     @canvas[y - 1][x - 1] = colour
   end
 
   def vertical_segment(x, y1, y2, colour)
-    return puts 'Please create a canvas first.' if @canvas.empty?
-    return puts 'Cannot colour pixels. First three parameters must be whole numbers.' if !x.is_a?(Integer) || !y1.is_a?(Integer) || !y2.is_a?(Integer)
-    return puts 'Cannot colour pixels. First three parameters must be greater than zero.' if x < 1 || y1 < 1 || y2 < 1
-    return puts 'Cannot colour pixels. The fourth parameters must be a single character, A-Z.' if !colour.is_a?(String) || colour.length > 1
-
-    height = @canvas.count
-    width = @canvas[0].count
-
-    return puts "Cannot colour selected pixels, as at least one does not exist. Please stay between (1, 1) and (#{width}, #{height})" if x > width || y1 > height || y2 > height
+    return unless canvas_exists?
+    return unless numbers_correct?([x, y1, y2])
+    return unless single_character?(colour)
+    return unless in_bounds?([[x], [y1, y2]])
 
     (y1..y2).each do |y|
       colour_pixel(x, y, colour)
@@ -76,15 +66,10 @@ class BitmapEditor
   end
 
   def horizontal_segment(x1, x2, y, colour)
-    return puts 'Please create a canvas first.' if @canvas.empty?
-    return puts 'Cannot colour pixels. First three parameters must be whole numbers.' if !x1.is_a?(Integer) || !x2.is_a?(Integer) || !y.is_a?(Integer)
-    return puts 'Cannot colour pixels. First three parameters must be greater than zero.' if x1 < 1 || x2 < 1 || y < 1
-    return puts 'Cannot colour pixels. The fourth parameters must be a single character, A-Z.' if !colour.is_a?(String) || colour.length > 1
-
-    height = @canvas.count
-    width = @canvas[0].count
-
-    return puts "Cannot colour selected pixels, as at least one does not exist. Please stay between (1, 1) and (#{width}, #{height})" if x1 > width || x2 > width || y > height
+    return unless canvas_exists?
+    return unless numbers_correct?([x1, x2, y])
+    return unless single_character?(colour)
+    return unless in_bounds?([[x1, x2], [y]])
 
     (x1..x2).each do |x|
       colour_pixel(x, y, colour)
@@ -92,7 +77,50 @@ class BitmapEditor
   end
 
   def output_canvas
-    return puts 'Please create a canvas first.' if @canvas.empty?
+    return unless canvas_exists?
     @canvas.each { |row| puts row.join }
+  end
+
+  private
+
+  def canvas_exists?
+    if @canvas.empty?
+      puts 'Please create a canvas first.'
+      return false
+    end
+    true
+  end
+
+  def numbers_correct?(args)
+    args.each do |parameter|
+      unless parameter.is_a?(Integer) && !parameter.zero?
+        puts "Cannot colour pixel(s). First #{args.count} parameters must be whole numbers and cannot be zero."
+        return false
+      end
+    end
+    true
+  end
+
+  def single_character?(character)
+    unless character.is_a?(String) && character.length == 1
+      puts 'Cannot colour pixel(s). The final parameter must be a single character, A-Z.'
+      return false
+    end
+    true
+  end
+
+  def in_bounds?(args)
+    height = @canvas.count
+    width = @canvas[0].count
+    error = false
+
+    args[0].each { |num| error = true if num > width }
+    args[1].each { |num| error = true if num > height }
+
+    if error
+      puts "Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (#{width}, #{height})"
+      return false
+    end
+    true
   end
 end
