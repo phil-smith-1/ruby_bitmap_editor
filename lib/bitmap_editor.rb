@@ -17,7 +17,7 @@ class BitmapEditor # :nodoc:
     return puts 'please provide correct file' if file.nil? || !File.exist?(file)
 
     File.open(file).each do |line|
-      parsed_line = line.gsub(/\s+/, '')
+      parsed_line = line.split(' ')
       command = parsed_line[0]
       if VALID_COMMANDS.include?(command)
         send(COMMAND_METHODS[command.to_sym], parsed_line)
@@ -30,7 +30,7 @@ class BitmapEditor # :nodoc:
   def create_canvas(args)
     width = args[1].to_i
     height = args[2].to_i
-    return puts 'Cannot create canvas. Both parameters must be whole numbers and cannot be zero.' if width.zero? || height.zero?
+    return puts 'Cannot create canvas. Both parameters must be whole numbers between 1 and 250.' unless width.between?(1, 250) && height.between?(1, 250)
 
     @canvas = []
     height.times do |row|
@@ -104,7 +104,7 @@ class BitmapEditor # :nodoc:
   end
 
   def alpha_character?(character)
-    unless /[A-Za-z]/ =~ character
+    unless /[A-Za-z]/ =~ character && character.length == 1
       puts 'Cannot colour pixel(s). The final parameter must be a single character, A-Z.'
       return false
     end
