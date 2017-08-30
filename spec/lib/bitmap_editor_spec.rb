@@ -4,7 +4,7 @@ RSpec.describe BitmapEditor do
   subject { BitmapEditor.new }
 
   def set_canvas
-    subject.instance_variable_set(:@canvas, [%w[C A R], %w[W O W], %w[Y E A]])
+    subject.instance_variable_set(:@canvas, [%w[A B C], %w[D E F], %w[G H I], %w[J K L]])
   end
 
   describe '#run' do
@@ -54,7 +54,7 @@ RSpec.describe BitmapEditor do
     it 'sets every pixel on the canvas to O' do
       set_canvas
       subject.clear_canvas
-      expect(subject.instance_variable_get(:@canvas)).to eq([%w[O O O], %w[O O O], %w[O O O]])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[O O O], %w[O O O], %w[O O O], %w[O O O]])
     end
   end
 
@@ -71,11 +71,11 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the selected coordinate does not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)')
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 4)')
                                       .exactly(3).times
-      subject.colour_pixel(%w[L 1 4 C])
+      subject.colour_pixel(%w[L 1 5 C])
       subject.colour_pixel(%w[L 4 1 C])
-      subject.colour_pixel(%w[L 4 4 C])
+      subject.colour_pixel(%w[L 4 5 C])
     end
 
     it 'returns an error if the third parameter is not a string' do
@@ -85,7 +85,7 @@ RSpec.describe BitmapEditor do
     end
 
     it 'returns an error if the canvas has not been created' do
-      subject.instance_variable_set(:@canvas, [])
+      subject.instance_variable_set(:@canvas, nil)
       expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
       subject.colour_pixel(%w[L 1 1 C])
     end
@@ -93,7 +93,7 @@ RSpec.describe BitmapEditor do
     it 'changes the selected pixel to the requested colour' do
       set_canvas
       subject.colour_pixel(%w[L 3 3 P])
-      expect(subject.instance_variable_get(:@canvas)).to eq([%w[C A R], %w[W O W], %w[Y E P]])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[A B C], %w[D E F], %w[G H P], %w[J K L]])
     end
   end
 
@@ -112,12 +112,11 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the selected coordinates do not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)')
-                                      .exactly(4).times
-      subject.vertical_segment(%w[V 1 4 1 C])
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 4)')
+                                      .exactly(3).times
+      subject.vertical_segment(%w[V 1 1 5 C])
       subject.vertical_segment(%w[V 4 1 1 C])
-      subject.vertical_segment(%w[V 1 1 4 C])
-      subject.vertical_segment(%w[V 4 4 4 C])
+      subject.vertical_segment(%w[V 4 4 5 C])
     end
 
     it 'returns an error if the fourth parameter is not a string' do
@@ -127,7 +126,7 @@ RSpec.describe BitmapEditor do
     end
 
     it 'returns an error if the canvas has not been created' do
-      subject.instance_variable_set(:@canvas, [])
+      subject.instance_variable_set(:@canvas, nil)
       expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
       subject.vertical_segment(%w[V 1 1 1 C])
     end
@@ -135,7 +134,7 @@ RSpec.describe BitmapEditor do
     it 'changes the selected pixels to the requested colour' do
       set_canvas
       subject.vertical_segment(%w[V 2 1 2 P])
-      expect(subject.instance_variable_get(:@canvas)).to eq([%w[C P R], %w[W P W], %w[Y E A]])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[A P C], %w[D P F], %w[G H I], %w[J K L]])
     end
   end
 
@@ -154,12 +153,11 @@ RSpec.describe BitmapEditor do
 
     it 'returns an error if the selected coordinates do not exist on the canvas' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 3)')
-                                      .exactly(4).times
+      expect(STDOUT).to receive(:puts).with('Cannot colour selected pixel(s), as at least one does not exist. Please stay between (1, 1) and (3, 4)')
+                                      .exactly(3).times
       subject.horizontal_segment(%w[H 1 4 1 C])
-      subject.horizontal_segment(%w[H 4 1 1 C])
-      subject.horizontal_segment(%w[H 1 1 4 C])
-      subject.horizontal_segment(%w[H 4 4 4 C])
+      subject.horizontal_segment(%w[H 1 1 5 C])
+      subject.horizontal_segment(%w[H 4 4 5 C])
     end
 
     it 'returns an error if the fourth parameter is not a string' do
@@ -169,7 +167,7 @@ RSpec.describe BitmapEditor do
     end
 
     it 'returns an error if the canvas has not been created' do
-      subject.instance_variable_set(:@canvas, [])
+      subject.instance_variable_set(:@canvas, nil)
       expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
       subject.horizontal_segment(%w[H 1 1 1 C])
     end
@@ -177,22 +175,23 @@ RSpec.describe BitmapEditor do
     it 'changes the selected pixels to the requested colour' do
       set_canvas
       subject.horizontal_segment(%w[H 1 2 2 P])
-      expect(subject.instance_variable_get(:@canvas)).to eq([%w[C A R], %w[P P W], %w[Y E A]])
+      expect(subject.instance_variable_get(:@canvas)).to eq([%w[A B C], %w[P P F], %w[G H I], %w[J K L]])
     end
   end
 
   describe '#output_canvas' do
     it 'returns an error if the canvas is empty' do
-      subject.instance_variable_set(:@canvas, [])
+      subject.instance_variable_set(:@canvas, nil)
       expect(STDOUT).to receive(:puts).with('Please create a canvas first.')
       subject.output_canvas
     end
 
     it 'outputs canvas when it exists' do
       set_canvas
-      expect(STDOUT).to receive(:puts).with('WOW')
-      expect(STDOUT).to receive(:puts).with('CAR')
-      expect(STDOUT).to receive(:puts).with('YEA')
+      expect(STDOUT).to receive(:puts).with('ABC')
+      expect(STDOUT).to receive(:puts).with('DEF')
+      expect(STDOUT).to receive(:puts).with('GHI')
+      expect(STDOUT).to receive(:puts).with('JKL')
       subject.output_canvas
     end
   end

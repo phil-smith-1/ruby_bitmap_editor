@@ -1,3 +1,4 @@
+require 'pry'
 class BitmapEditor # :nodoc:
   VALID_COMMANDS = 'ICLVHS'.freeze
   COMMAND_METHODS = {
@@ -32,8 +33,9 @@ class BitmapEditor # :nodoc:
   end
 
   def clear_canvas(_args = [])
+    return unless canvas_exists?
     @canvas.count.times do |row|
-      @canvas[row].count.times { |column| colour_pixel("L#{row + 1}#{column + 1}O") }
+      @canvas[row].count.times { |column| colour_pixel("L#{column + 1}#{row + 1}O") }
     end
   end
 
@@ -78,7 +80,7 @@ class BitmapEditor # :nodoc:
   private
 
   def canvas_exists?
-    if @canvas.empty?
+    if @canvas.nil?
       puts 'Please create a canvas first.'
       return false
     end
