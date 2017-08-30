@@ -34,8 +34,8 @@ class BitmapEditor # :nodoc:
 
   def clear_canvas(_args = [])
     return unless canvas_exists?
-    @canvas.count.times do |row|
-      @canvas[row].count.times { |column| colour_pixel("L#{column + 1}#{row + 1}O") }
+    @canvas.each_with_index do |row, row_index|
+      row.each_with_index { |column, column_index| @canvas[row_index][column_index] = 'O' }
     end
   end
 
