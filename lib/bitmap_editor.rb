@@ -35,7 +35,7 @@ class BitmapEditor # :nodoc:
   def clear_canvas(_args = [])
     return unless canvas_exists?
     @canvas.each_with_index do |row, row_index|
-      row.each_with_index { |column, column_index| @canvas[row_index][column_index] = 'O' }
+      row.each_with_index { |_column, column_index| @canvas[row_index][column_index] = 'O' }
     end
   end
 
